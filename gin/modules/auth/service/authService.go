@@ -10,3 +10,7 @@ func Login(loginReq *models.LoginReq) (LoginRes *models.LoginRes, err error) {
 	}
 	return LoginRes, nil
 }
+
+func Logout(logoutReq *models.LogoutReq) (LogoutRes *models.LogoutRes, err error) {
+	return &models.LogoutRes{Msg: "logout success"}, nil
+}

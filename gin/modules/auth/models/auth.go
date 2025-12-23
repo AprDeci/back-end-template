@@ -10,3 +10,11 @@ type LoginRes struct {
 	Username string `json:"username"`
 	Token    string `json:"token"`
 }
+
+type LogoutReq struct {
+	Token string `json:"token"`
+}
+
+type LogoutRes struct {
+	Msg string `json:"msg"`
+}

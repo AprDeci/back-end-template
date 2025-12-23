@@ -30,3 +30,26 @@ func Login(c *gin.Context) {
 	}
 	c.JSON(200, loginRes)
 }
+
+// @Summary logout
+// @Description Revoke user token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param logoutReq body models.LogoutReq true "Logout request"
+// @Success 200 {object} models.LogoutRes
+// @Failure 400 {string} string "Bad Request"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /api/auth/logout [post]
+func Logout(c *gin.Context) {
+	var logoutReq models.LogoutReq
+	err := c.ShouldBindBodyWithJSON(&logoutReq)
+	if err != nil {
+		c.JSON(400, err.Error())
+	}
+	logoutRes, err := service.Logout(&logoutReq)
+	if err != nil {
+		c.JSON(500, err.Error())
+	}
+	c.JSON(200, logoutRes)
+}
