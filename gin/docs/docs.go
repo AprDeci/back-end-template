@@ -27,7 +27,7 @@ const docTemplate = `{
                 "tags": [
                     "auth"
                 ],
-                "summary": "User login",
+                "summary": "login",
                 "parameters": [
                     {
                         "description": "Login request",

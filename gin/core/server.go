@@ -2,7 +2,7 @@ package core
 
 import (
 	"context"
-	"gin-template/core/initialize"
+	"gin-template/initialize"
 	"log"
 	"net/http"
 	"os"

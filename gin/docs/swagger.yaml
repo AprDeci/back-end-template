@@ -45,7 +45,7 @@ paths:
           description: Internal Server Error
           schema:
             type: string
-      summary: User login
+      summary: login
       tags:
       - auth
 swagger: "2.0"

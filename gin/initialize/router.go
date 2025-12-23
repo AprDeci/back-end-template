@@ -23,7 +23,7 @@ func Routers() *gin.Engine {
 	Router.GET("/docs/*any", openapiui.WrapHandler(openapiui.Config{
 		SpecURL:      "/docs/openapi.json",
 		SpecFilePath: "./docs/swagger.json",
-		Title:        "Example API",
+		Title:        "Gin Template",
 		Theme:        "light", // or "dark"
 	}))
 
