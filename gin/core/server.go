@@ -2,6 +2,8 @@ package core
 
 import (
 	"context"
+	"fmt"
+	"gin-template/global"
 	"gin-template/initialize"
 	"log"
 	"net/http"
@@ -13,9 +15,9 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func initServer(router *gin.Engine) {
+func initServer(router *gin.Engine, addr string) {
 	srv := &http.Server{
-		Addr:    ":8080",
+		Addr:    addr,
 		Handler: router,
 	}
 
@@ -41,6 +43,8 @@ func RunServer() {
 
 	Router := initialize.Routers()
 
-	initServer(Router)
+	address := fmt.Sprintf(":%s", global.GVA_CONFIG.System.Addr)
+
+	initServer(Router, address)
 
 }

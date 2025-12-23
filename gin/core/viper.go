@@ -31,7 +31,9 @@ func Viper() *viper.Viper {
 			fmt.Println(err)
 		}
 	})
-
+	if err = v.Unmarshal(&global.GVA_CONFIG); err != nil {
+		panic(fmt.Errorf("fatal error unmarshal config: %w", err))
+	}
 	return v
 }
 

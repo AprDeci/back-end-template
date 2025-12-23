@@ -1,5 +1,5 @@
 package config
 
 type Server struct {
-	System System
+	System System `mapstructure:"system" json:"system" yaml:"system"`
 }
