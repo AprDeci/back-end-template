@@ -7,6 +7,16 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+// @Summary User login
+// @Description Authenticate user and return token
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param loginReq body models.LoginReq true "Login request"
+// @Success 200 {object} models.LoginRes
+// @Failure 400 {string} string "Bad Request"
+// @Failure 500 {string} string "Internal Server Error"
+// @Router /auth/login [post]
 func Login(c *gin.Context) {
 	var loginReq models.LoginReq
 	err := c.ShouldBindBodyWithJSON(&loginReq)
