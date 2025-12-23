@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// @Summary User login
+// @Summary login
 // @Description Authenticate user and return token
 // @Tags auth
 // @Accept json
