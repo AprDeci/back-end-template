@@ -16,7 +16,7 @@ import (
 // @Success 200 {object} models.LoginRes
 // @Failure 400 {string} string "Bad Request"
 // @Failure 500 {string} string "Internal Server Error"
-// @Router /auth/login [post]
+// @Router /api/auth/login [post]
 func Login(c *gin.Context) {
 	var loginReq models.LoginReq
 	err := c.ShouldBindBodyWithJSON(&loginReq)
