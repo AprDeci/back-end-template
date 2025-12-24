@@ -3,3 +3,10 @@ system:
 logger:
   level: "debug"
   writeInFile: true
+  writeInConsole: true
+logFile:
+  filePath: "gin.log"
+  maxsize: 100
+  maxAge: 30
+  maxBackup: 10
+  compress: true

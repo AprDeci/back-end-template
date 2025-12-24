@@ -21,14 +21,17 @@ func InitLogger() (logger *zap.Logger, err error) {
 
 	var core zapcore.Core
 
-	if global.GVA_CONFIG.Logger.WriteInFile {
-		core = zapcore.NewTee(zapcore.NewCore(encoder, fileWriteSyncer, zapcore.DebugLevel), // 文件
-			zapcore.NewCore(encoder, consoleWriteSyncer, zapcore.DebugLevel), // 控制台
-		)
-	} else {
-		core = zapcore.NewTee(zapcore.NewCore(encoder, consoleWriteSyncer, zapcore.DebugLevel)) // 控制台
+	cores := []zapcore.Core{}
 
+	if global.GVA_CONFIG.Logger.WriteInFile {
+		cores = append(cores, zapcore.NewCore(encoder, fileWriteSyncer, zapcore.DebugLevel))
 	}
+
+	if global.GVA_CONFIG.Logger.WriteInConsole {
+		cores = append(cores, zapcore.NewCore(encoder, consoleWriteSyncer, zapcore.DebugLevel))
+	}
+
+	core = zapcore.NewTee(cores...)
 
 	logger = zap.New(core, zap.AddCaller())
 	return logger, nil
