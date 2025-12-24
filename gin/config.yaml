@@ -10,3 +10,6 @@ logFile:
   maxAge: 30
   maxBackup: 10
   compress: true
+jwt:
+  secret: "secret"
+  expired: 86400
