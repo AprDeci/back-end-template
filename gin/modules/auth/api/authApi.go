@@ -1,6 +1,7 @@
 package api
 
 import (
+	"gin-template/core/response"
 	"gin-template/modules/auth/models"
 	"gin-template/modules/auth/service"
 
@@ -21,14 +22,14 @@ func Login(c *gin.Context) {
 	var loginReq models.LoginReq
 	err := c.ShouldBindBodyWithJSON(&loginReq)
 	if err != nil {
-		c.JSON(400, err.Error())
+		response.Fail(c, 400, err.Error())
 	}
 	loginRes, err := service.Login(&loginReq)
 
 	if err != nil {
-		c.JSON(500, err.Error())
+		response.Fail(c, 500, err.Error())
 	}
-	c.JSON(200, loginRes)
+	response.Success(c, loginRes, "login success")
 }
 
 // @Summary logout
@@ -45,11 +46,11 @@ func Logout(c *gin.Context) {
 	var logoutReq models.LogoutReq
 	err := c.ShouldBindBodyWithJSON(&logoutReq)
 	if err != nil {
-		c.JSON(400, err.Error())
+		response.Fail(c, 400, err.Error())
 	}
 	logoutRes, err := service.Logout(&logoutReq)
 	if err != nil {
-		c.JSON(500, err.Error())
+		response.Fail(c, 500, err.Error())
 	}
-	c.JSON(200, logoutRes)
+	response.Success(c, logoutRes, "logout success")
 }
