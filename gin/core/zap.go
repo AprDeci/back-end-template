@@ -19,6 +19,10 @@ func InitLogger() (logger *zap.Logger, err error) {
 	consoleWriteSyncer := zapcore.AddSync(os.Stdout)
 
 	//level
+	var level zapcore.Level
+	if err := level.UnmarshalText([]byte(global.GVA_CONFIG.Logger.Level)); err != nil {
+		level = zapcore.InfoLevel
+	}
 
 	var core zapcore.Core
 

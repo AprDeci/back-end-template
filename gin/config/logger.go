@@ -4,6 +4,7 @@ type Logger struct {
 	WriteInFile    bool    `mapstructure:"writeInFile" json:"writeInFile" yaml:"writeInFile"`
 	WriteInConsole bool    `mapstructure:"writeInConsole" json:"writeInConsole" yaml:"writeInConsole"`
 	LogFile        LogFile `mapstructure:"logFile" json:"logFile" yaml:"logFile"`
+	Level          string  `mapstructure:"level" json:"level" yaml:"level"`
 }
 
 type LogFile struct {
