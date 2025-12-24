@@ -35,6 +35,7 @@ func InitLogger() (logger *zap.Logger, err error) {
 	core = zapcore.NewTee(cores...)
 
 	logger = zap.New(core, zap.AddCaller())
+	zap.ReplaceGlobals(logger)
 	return logger, nil
 }
 
