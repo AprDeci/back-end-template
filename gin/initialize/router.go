@@ -1,8 +1,12 @@
 package initialize
 
 import (
+	"gin-template/global"
+	"gin-template/middleware"
 	"gin-template/modules/auth"
+	"time"
 
+	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
 
 	openapiui "github.com/PeterTakahashi/gin-openapi/openapiui"
@@ -26,6 +30,14 @@ func Routers() *gin.Engine {
 		Title:        "Gin Template",
 		Theme:        "light", // or "dark"
 	}))
+
+	logger := global.GVA_LOG
+
+	Router.Use(ginzap.Ginzap(logger, time.RFC3339, true))
+
+	Router.Use(ginzap.RecoveryWithZap(logger, true))
+
+	Router.Use(middleware.JWTMiddleware())
 
 	apiGroup := Router.Group("api")
 

@@ -12,9 +12,7 @@ import (
 	"syscall"
 	"time"
 
-	ginzap "github.com/gin-contrib/zap"
 	"github.com/gin-gonic/gin"
-	"go.uber.org/zap"
 )
 
 func initServer(router *gin.Engine, addr string) {
@@ -46,14 +44,6 @@ func RunServer() {
 	Router := initialize.Routers()
 
 	address := fmt.Sprintf(":%s", global.GVA_CONFIG.System.Addr)
-
-	logger := global.GVA_LOG
-
-	logger.Info("start server", zap.String("addr", address))
-
-	Router.Use(ginzap.Ginzap(logger, time.RFC3339, true))
-
-	Router.Use(ginzap.RecoveryWithZap(logger, true))
 
 	initServer(Router, address)
 

@@ -8,6 +8,8 @@ func Login(loginReq *models.LoginReq) (LoginRes *models.LoginRes, err error) {
 		Username: loginReq.Username,
 		Token:    "token",
 	}
+	//TODO:生成Token
+
 	return LoginRes, nil
 }
 
