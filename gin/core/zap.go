@@ -1,6 +1,7 @@
 package core
 
 import (
+	"gin-template/config"
 	"gin-template/global"
 	"os"
 
@@ -11,7 +12,7 @@ import (
 
 func InitLogger() (logger *zap.Logger, err error) {
 	//文件输出
-	fileWriteSyncer := getLogWriter()
+	fileWriteSyncer := getLogWriter(global.GVA_CONFIG.Logger.LogFile)
 
 	encoder := getEncoder()
 	//控制台输出
@@ -44,13 +45,13 @@ func getEncoder() zapcore.Encoder {
 	return zapcore.NewConsoleEncoder(encoderConfig)
 }
 
-func getLogWriter() zapcore.WriteSyncer {
+func getLogWriter(logFile config.LogFile) zapcore.WriteSyncer {
 	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "log/gin.log",
-		MaxSize:    10,
-		MaxBackups: 5,
-		MaxAge:     30,
-		Compress:   true,
+		Filename:   logFile.FilePath,
+		MaxSize:    logFile.MaxSize,
+		MaxBackups: logFile.MaxBackup,
+		MaxAge:     logFile.MaxAge,
+		Compress:   logFile.Compress,
 	}
 	return zapcore.AddSync(lumberJackLogger)
 }
