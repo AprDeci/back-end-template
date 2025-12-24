@@ -1,2 +1,4 @@
 system:
   addr: 8080
+logger:
+  writeInFile: true
