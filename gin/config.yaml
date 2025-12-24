@@ -1,4 +1,5 @@
 system:
   addr: 8080
 logger:
+  level: "debug"
   writeInFile: true

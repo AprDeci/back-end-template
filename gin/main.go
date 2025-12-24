@@ -7,6 +7,7 @@ import (
 
 func initSystem() {
 	global.GVA_VIPER = core.Viper()
+	global.GVA_LOG, _ = core.InitLogger()
 }
 
 func main() {
