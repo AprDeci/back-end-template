@@ -13,6 +13,7 @@ func (ar *AuthRouter) InitAuthRouter(Router *gin.RouterGroup) {
 
 	{
 		authRouter.POST("login", api.Login)
+		authRouter.POST("register", api.Register)
 		authRouter.POST("logout", api.Logout)
 	}
 

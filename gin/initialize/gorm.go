@@ -2,6 +2,7 @@ package initialize
 
 import (
 	"gin-template/global"
+	"gin-template/modules/users/models"
 
 	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
@@ -20,6 +21,11 @@ func Gorm() *gorm.DB {
 	db, err := gorm.Open(mysql.New(mysqlConfig), &gorm.Config{})
 	if err != nil {
 		global.GVA_LOG.Error("failed to connect database", zap.Error(err))
+		return nil
+	}
+
+	if err = db.AutoMigrate(&models.User{}); err != nil {
+		global.GVA_LOG.Error("failed to migrate users table", zap.Error(err))
 	}
 	return db
 }

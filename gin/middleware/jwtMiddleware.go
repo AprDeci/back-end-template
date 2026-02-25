@@ -3,6 +3,7 @@ package middleware
 import (
 	"gin-template/core/response"
 	"gin-template/utils"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -16,7 +17,18 @@ func JWTMiddleware() gin.HandlerFunc {
 		var (
 			req         = c.Request
 			tokenString = req.Header.Get(GinHeaderAuthorizationKey)
+			path        = req.URL.Path
 		)
+
+		if path == "/api/auth/login" || path == "/api/auth/register" || strings.HasPrefix(path, "/docs") {
+			c.Next()
+			return
+		}
+
+		tokenString = strings.TrimSpace(tokenString)
+		if strings.HasPrefix(strings.ToLower(tokenString), "bearer ") {
+			tokenString = strings.TrimSpace(tokenString[7:])
+		}
 
 		if tokenString == "" {
 			response.Fail(c, response.Unauthorized, "未授权访问")

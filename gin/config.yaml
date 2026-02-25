@@ -20,5 +20,5 @@ db:
   port: 3306
   user: "root"
   password: "Luchen1122"
-  name: "test"
+  name: "gin_template"
   params: "charset=utf8&parseTime=True&loc=Local"
