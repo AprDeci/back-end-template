@@ -3,6 +3,7 @@ package main
 import (
 	"gin-template/core"
 	"gin-template/global"
+	"gin-template/initialize"
 
 	"go.uber.org/zap"
 )
@@ -10,6 +11,7 @@ import (
 func initSystem() {
 	global.GVA_VIPER = core.Viper()
 	global.GVA_LOG, _ = core.InitLogger()
+	global.GVA_DB = initialize.Gorm()
 }
 
 func main() {

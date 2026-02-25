@@ -13,3 +13,12 @@ logFile:
 jwt:
   secret: "secret"
   expired: 86400
+
+db:
+  type: "mysql"
+  host: "127.0.0.1"
+  port: 3306
+  user: "root"
+  password: "Luchen1122"
+  name: "test"
+  params: "charset=utf8&parseTime=True&loc=Local"
