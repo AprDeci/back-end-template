@@ -14,7 +14,7 @@ export function createApp(): Hono<AppEnv> {
   app.get("/", (c) => {
     return c.json({
       message: "Hono template is running",
-      env: env.NODE_ENV
+      env: env
     });
   });
 
