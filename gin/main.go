@@ -12,6 +12,9 @@ func initSystem() {
 	global.GVA_VIPER = core.Viper()
 	global.GVA_LOG, _ = core.InitLogger()
 	global.GVA_DB = initialize.Gorm()
+	if global.GVA_DB != nil {
+		initialize.Migrate(global.GVA_DB)
+	}
 }
 
 func main() {
