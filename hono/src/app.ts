@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import { env } from "./config/env.js";
-import { AppError } from "./core/error.js";
 import { fail, ResponseCode, success } from "./core/response.js";
+import { authRoutes } from "./modules/auth/auth.route.js";
 import type { AppEnv } from "./types/env.js";
 import { auth } from "./middlewares/auth.js";
 import { reportError, toErrorResponse } from "./middlewares/errorHandler.js";
@@ -38,6 +38,8 @@ export function createApp(): Hono<AppEnv> {
     );
   });
 
+  app.route("/api/auth", authRoutes);
+
   app.get("/api/private/ping", (c) => {
     return c.json(
       success(
@@ -49,14 +51,6 @@ export function createApp(): Hono<AppEnv> {
         "private ping success"
       )
     );
-  });
-
-  app.get("/debug/param-error", () => {
-    throw new AppError({
-      status: 400,
-      code: ResponseCode.PARAM_ERROR,
-      message: "param error"
-    });
   });
 
   app.onError((error, c) => {
