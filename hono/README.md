@@ -1,8 +1,14 @@
-```
-npm install
-npm run dev
+## Setup
+
+```bash
+pnpm install
+cp .env.example .env
+pnpm dev
 ```
 
-```
-open http://localhost:3000
-```
+## Endpoints
+
+- `GET /`
+- `GET /health`
+
+Default address: `http://localhost:8080`
