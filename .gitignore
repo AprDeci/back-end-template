@@ -1,3 +1,4 @@
 gin/tmp/*
 gin/docs
 gin/log
+gin/DEPENDENCIES.md

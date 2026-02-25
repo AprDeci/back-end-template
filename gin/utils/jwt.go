@@ -14,12 +14,13 @@ type UserClaims struct {
 	jwt.RegisteredClaims `json:"registered_claims"`
 }
 
-func GenerateToken() (string, error) {
+// GenerateTokenWithUserInfo 根据用户信息生成JWT令牌
+func GenerateTokenWithUserInfo(userID int32, username string, role string) (string, error) {
 
 	claims := &UserClaims{
-		Username: "test",
-		UserID:   1,
-		Role:     "admin",
+		Username: username,
+		UserID:   userID,
+		Role:     role,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(time.Now().Add(time.Duration(global.GVA_CONFIG.JWT.Expired) * time.Second)),
 		},
@@ -32,6 +33,11 @@ func GenerateToken() (string, error) {
 	ss, err := token.SignedString([]byte(secret))
 
 	return ss, err
+}
+
+// GenerateToken 生成JWT令牌(保留旧函数用于兼容性)
+func GenerateToken() (string, error) {
+	return GenerateTokenWithUserInfo(1, "test", "admin")
 }
 
 func ParseTokenWithClaims(tokenString string, claims *UserClaims) (*jwt.Token, error) {
