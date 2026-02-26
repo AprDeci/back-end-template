@@ -1,7 +1,11 @@
 import { Hono } from "hono";
 import { ZodError } from "zod";
 import { AppError } from "../../core/error.js";
-import { ResponseCode, success } from "../../core/response.js";
+import {
+  AppResponseSchema,
+  ResponseCode,
+  success
+} from "../../core/response.js";
 import type { AppEnv } from "../../types/env.js";
 import { loginSchema, registerSchema } from "./auth.schema.js";
 import * as authService from "./auth.service.js";
@@ -28,21 +32,27 @@ function parseBody<T>(
   }
 }
 
-authRoutes.post("/register", async (c) => {
-  const payload = await c.req.json();
-  const input = parseBody(payload, registerSchema);
-  const result = await authService.register(input);
-
-  return c.json(success(result, "register success"));
-});
-
-authRoutes.post("/regisdter", zValidator("json", registerSchema), async (c) => {
-  const payload = await c.req.json();
-  const input = parseBody(payload, registerSchema);
-  const result = await authService.register(input);
-
-  return c.json(success(result, "register success"));
-});
+authRoutes.post(
+  "/register",
+  describeRoute({
+    responses: {
+      200: {
+        description: "Successful response",
+        content: {
+          "application/json": {
+            schema: resolver(AppResponseSchema)
+          }
+        }
+      }
+    }
+  }),
+  zValidator("json", registerSchema),
+  async (c) => {
+    const input = await c.req.valid("json");
+    const result = await authService.register(input);
+    return c.json(success(result, "register success"));
+  }
+);
 
 authRoutes.post("/login", async (c) => {
   const payload = await c.req.json();

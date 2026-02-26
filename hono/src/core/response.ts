@@ -1,3 +1,5 @@
+import z from "zod";
+
 export const ResponseCode = {
   SUCCESS: 0,
   PARAM_ERROR: 10001,
@@ -12,6 +14,12 @@ export type AppResponse<T> = {
   message: string;
   data: T;
 };
+
+export const AppResponseSchema = z.object({
+  code: z.number(),
+  message: z.string(),
+  data: z.any()
+});
 
 export function success<T>(data: T, message = "ok"): AppResponse<T> {
   return {
