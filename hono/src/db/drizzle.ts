@@ -4,6 +4,6 @@ import { env } from "../config/env.js";
 // 拼接url
 const databaseUrl = `mysql://${env.DB_USER}:${env.DB_PASSWORD}@${env.DB_HOST}:${env.DB_PORT}/${env.DB_NAME}`;
 
-const db = drizzle({ connection: { uri: databaseUrl } });
+const dbClient = drizzle({ connection: { uri: databaseUrl } });
 
-export default db;
+export default dbClient;

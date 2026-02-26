@@ -3,6 +3,9 @@ import { ResponseCode } from "../../core/response.js";
 import { hashPassword, verifyPassword } from "../../utils/password.js";
 import { generateTokenWithUserInfo } from "../../utils/jwt.js";
 import type { LoginInput, RegisterInput } from "./auth.schema.js";
+import dbClient from "../../db/drizzle.js";
+import { usersTable } from "../../db/schema.js";
+import { eq } from "drizzle-orm";
 
 type AuthUser = {
   id: number;
@@ -26,7 +29,11 @@ let nextId = 1;
 
 export async function register(input: RegisterInput): Promise<RegisterResult> {
   const key = input.username.trim();
-  if (usersByName.has(key)) {
+  const result = await dbClient
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.username, key));
+  if (result.length > 0) {
     throw new AppError({
       status: 400,
       code: ResponseCode.PARAM_ERROR,
@@ -34,17 +41,18 @@ export async function register(input: RegisterInput): Promise<RegisterResult> {
     });
   }
 
-  const newUser: AuthUser = {
-    id: nextId,
+  const newUser = {
     username: key,
-    passwordHash: hashPassword(input.password)
+    password: hashPassword(input.password)
   };
 
-  nextId += 1;
-  usersByName.set(key, newUser);
+  const inserted = await dbClient
+    .insert(usersTable)
+    .values(newUser)
+    .$returningId();
 
   return {
-    id: newUser.id,
+    id: inserted[0].id,
     username: newUser.username
   };
 }
