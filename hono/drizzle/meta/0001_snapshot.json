@@ -1,8 +1,8 @@
 {
   "version": "5",
   "dialect": "mysql",
-  "id": "bd8e095d-78de-44ca-8c18-1f322fcd3989",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "2650a6e1-cf01-4128-8b9d-1bda57f1b0a3",
+  "prevId": "bd8e095d-78de-44ca-8c18-1f322fcd3989",
   "tables": {
     "user": {
       "name": "user",
@@ -47,6 +47,28 @@
           "type": "varchar(255)",
           "primaryKey": false,
           "notNull": true,
+          "autoincrement": false
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(now())"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false,
           "autoincrement": false
         }
       },
