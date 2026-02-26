@@ -1,4 +1,5 @@
 import { Hono } from "hono";
+
 import { env } from "./config/env.js";
 import { fail, ResponseCode, success } from "./core/response.js";
 import { authRoutes } from "./modules/auth/auth.route.js";
@@ -7,6 +8,8 @@ import { auth } from "./middlewares/auth.js";
 import { reportError, toErrorResponse } from "./middlewares/errorHandler.js";
 import { requestId } from "./middlewares/requestId.js";
 import { requestLogger } from "./middlewares/requestLogger.js";
+import { openAPIRouteHandler } from "hono-openapi";
+import { Scalar } from "@scalar/hono-api-reference";
 
 export function createApp(): Hono<AppEnv> {
   const app = new Hono<AppEnv>();
@@ -27,16 +30,23 @@ export function createApp(): Hono<AppEnv> {
     );
   });
 
-  app.get("/health", (c) => {
-    return c.json(
-      success(
-        {
-          status: "ok"
+  app.get(
+    "/openapi",
+    openAPIRouteHandler(app, {
+      documentation: {
+        info: {
+          title: "Hono API",
+          version: "1.0.0",
+          description: "Greeting API"
         },
-        "health check passed"
-      )
-    );
-  });
+        servers: [
+          { url: `http://localhost:${env.PORT}`, description: "Local Server" }
+        ]
+      }
+    })
+  );
+
+  app.get("/scalar", Scalar({ url: "/openapi" }));
 
   app.route("/api/auth", authRoutes);
 

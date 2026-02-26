@@ -9,7 +9,9 @@ const AUTH_WHITELIST = new Set<string>([
   "/health",
   "/api/auth/login",
   "/api/auth/register",
-  "/docs"
+  "/docs",
+  "/scalar",
+  "/openapi"
 ]);
 
 function isWhitelistPath(path: string): boolean {
