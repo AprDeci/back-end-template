@@ -1,52 +1,18 @@
 import { Hono } from "hono";
-import { ZodError } from "zod";
-import { AppError } from "../../core/error.js";
-import {
-  AppResponseSchema,
-  ResponseCode,
-  success
-} from "../../core/response.js";
+import { AppResponseSchema, success } from "../../core/response.js";
 import type { AppEnv } from "../../types/env.js";
 import { loginSchema, registerSchema } from "./auth.schema.js";
 import * as authService from "./auth.service.js";
-import { resolver, describeRoute } from "hono-openapi";
 import { zv } from "../../utils/validator.js";
+import { createRouteDescriber } from "../../utils/openapi.js";
 
 export const authRoutes = new Hono<AppEnv>();
 
-function parseBody<T>(
-  payload: unknown,
-  parser: { parse: (input: unknown) => T }
-): T {
-  try {
-    return parser.parse(payload);
-  } catch (error) {
-    if (error instanceof ZodError) {
-      throw new AppError({
-        status: 400,
-        code: ResponseCode.PARAM_ERROR,
-        message: error.issues[0]?.message ?? "param error"
-      });
-    }
-
-    throw error;
-  }
-}
+const describeAuthRoute = createRouteDescriber(["auth"], AppResponseSchema);
 
 authRoutes.post(
   "/register",
-  describeRoute({
-    responses: {
-      200: {
-        description: "Successful response",
-        content: {
-          "application/json": {
-            schema: resolver(AppResponseSchema)
-          }
-        }
-      }
-    }
-  }),
+  describeAuthRoute("Register"),
   zv("json", registerSchema),
   async (c) => {
     const input = await c.req.valid("json");
@@ -55,15 +21,18 @@ authRoutes.post(
   }
 );
 
-authRoutes.post("/login", async (c) => {
-  const payload = await c.req.json();
-  const input = parseBody(payload, loginSchema);
-  const result = await authService.login(input);
+authRoutes.post(
+  "/login",
+  describeAuthRoute("Login"),
+  zv("json", loginSchema),
+  async (c) => {
+    const input = await c.req.valid("json");
+    const result = await authService.login(input);
+    return c.json(success(result, "login success"));
+  }
+);
 
-  return c.json(success(result, "login success"));
-});
-
-authRoutes.post("/logout", async (c) => {
+authRoutes.post("/logout", describeAuthRoute("Logout"), async (c) => {
   const result = await authService.logout();
   return c.json(success(result, "logout success"));
 });
