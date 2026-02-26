@@ -9,7 +9,8 @@ import {
 import type { AppEnv } from "../../types/env.js";
 import { loginSchema, registerSchema } from "./auth.schema.js";
 import * as authService from "./auth.service.js";
-import { validator as zValidator, resolver, describeRoute } from "hono-openapi";
+import { resolver, describeRoute } from "hono-openapi";
+import { zv } from "../../utils/validator.js";
 
 export const authRoutes = new Hono<AppEnv>();
 
@@ -46,7 +47,7 @@ authRoutes.post(
       }
     }
   }),
-  zValidator("json", registerSchema),
+  zv("json", registerSchema),
   async (c) => {
     const input = await c.req.valid("json");
     const result = await authService.register(input);
