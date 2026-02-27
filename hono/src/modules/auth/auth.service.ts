@@ -7,12 +7,6 @@ import dbClient from "../../db/drizzle.js";
 import { usersTable } from "../../db/schema.js";
 import { eq } from "drizzle-orm";
 
-type AuthUser = {
-  id: number;
-  username: string;
-  passwordHash: string;
-};
-
 type RegisterResult = {
   id: number;
   username: string;
@@ -23,9 +17,6 @@ type LoginResult = {
   username: string;
   token: string;
 };
-
-const usersByName = new Map<string, AuthUser>();
-let nextId = 1;
 
 export async function register(input: RegisterInput): Promise<RegisterResult> {
   const key = input.username.trim();
@@ -59,9 +50,12 @@ export async function register(input: RegisterInput): Promise<RegisterResult> {
 
 export async function login(input: LoginInput): Promise<LoginResult> {
   const key = input.username.trim();
-  const user = usersByName.get(key);
+  const users = await dbClient
+    .select()
+    .from(usersTable)
+    .where(eq(usersTable.username, key));
 
-  if (!user) {
+  if (users.length === 0) {
     throw new AppError({
       status: 400,
       code: ResponseCode.NOT_FOUND,
@@ -69,7 +63,9 @@ export async function login(input: LoginInput): Promise<LoginResult> {
     });
   }
 
-  if (!verifyPassword(input.password, user.passwordHash)) {
+  const user = users[0];
+
+  if (!verifyPassword(input.password, user.password)) {
     throw new AppError({
       status: 401,
       code: ResponseCode.UNAUTHORIZED,
